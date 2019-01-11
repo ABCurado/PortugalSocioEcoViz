@@ -13,11 +13,4 @@ df_2011 <- readRDS("data/dataframe_2011.rds")
 df_2015 <- readRDS("data/dataframe_2015.rds")
 sapply(df_2015, class)
 
-allzips <- readRDS("data/superzip.rds")
-allzips$latitude <- jitter(allzips$latitude)
-allzips$longitude <- jitter(allzips$longitude)
-allzips$college <- allzips$college * 100
-allzips$zipcode <- formatC(allzips$zipcode, width=5, format="d", flag="0")
-row.names(allzips) <- allzips$zipcode
-
 cleantable <- df_2015
