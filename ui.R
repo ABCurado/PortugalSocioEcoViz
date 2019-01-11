@@ -2,15 +2,16 @@ library(leaflet)
 
 # Choices for drop-downs
 vars <- c(
-  "Is SuperZIP?" = "superzip",
-  "Centile score" = "centile",
-  "College education" = "college",
-  "Median income" = "income",
-  "Population" = "adultpop"
+  "Young people%" = "Fraction_0.14",
+  "Winning Party" = "Winning_Party",
+  "Population Size" = "Total",
+  "Total Average Income" = "Total_Average_income",
+  "Unemployment Rate" = "Unemployment_.Rate",
+  "Uneducated Percentage" = "Fraction_Without_Education"
 )
 
 
-navbarPage("Superzip", id="nav",
+navbarPage("Portugal SocioEco", id="nav",
 
   tabPanel("Interactive map",
     div(class="outer",
@@ -33,17 +34,13 @@ navbarPage("Superzip", id="nav",
 
         selectInput("color", "Color", vars),
         selectInput("size", "Size", vars, selected = "adultpop"),
-        conditionalPanel("input.color == 'superzip' || input.size == 'superzip'",
-          # Only prompt for threshold when coloring or sizing by superzip
-          numericInput("threshold", "SuperZIP threshold (top n percentile)", 5)
-        ),
 
         plotOutput("histCentile", height = 200),
         plotOutput("scatterCollegeIncome", height = 250)
       ),
 
       tags$div(id="cite",
-        'Data compiled for ', tags$em('Coming Apart: The State of White America, 1960–2010'), ' by Charles Murray (Crown Forum, 2012).'
+        'Data compiled for IP Project, Curado et al.(2018)'
       )
     )
   ),
@@ -51,29 +48,19 @@ navbarPage("Superzip", id="nav",
   tabPanel("Data explorer",
     fluidRow(
       column(3,
-        selectInput("states", "States", c("All states"="", structure(state.abb, names=state.name), "Washington, DC"="DC"), multiple=TRUE)
-      ),
-      column(3,
-        conditionalPanel("input.states",
-          selectInput("cities", "Cities", c("All cities"=""), multiple=TRUE)
-        )
-      ),
-      column(3,
-        conditionalPanel("input.states",
-          selectInput("zipcodes", "Zipcodes", c("All zipcodes"=""), multiple=TRUE)
-        )
+        selectInput("municipality", "Municipality", df_2015$Municipality, multiple=TRUE)
       )
     ),
     fluidRow(
       column(1,
-        numericInput("minScore", "Min score", min=0, max=100, value=0)
+        numericInput("minScore", "Min Population", min=0, max=100, value=0)
       ),
       column(1,
-        numericInput("maxScore", "Max score", min=0, max=100, value=100)
+        numericInput("maxScore", "Max Population", min=0, max=100, value=10000)
       )
     ),
     hr(),
-    DT::dataTableOutput("ziptable")
+    DT::dataTableOutput("municipTable")
   ),
 
   conditionalPanel("false", icon("crosshair"))
