@@ -35,10 +35,10 @@ function(input, output, session) {
  
     pal <- colorFactor("viridis", df_2015$Winning_Party)
     radius <- 30000
-    
+
     leafletProxy("map", data = df_2015) %>%
       clearShapes() %>%
-      addCircles(~x, ~y, radius=radius, layerId=~Municipality,
+      addCircles(~y, ~x, radius=radius, layerId=~Municipality,
                  stroke=FALSE, fillOpacity=0.4, fillColor=pal(df_2015$Winning_Party)) %>%
       addLegend("bottomleft", pal=pal, values=df_2015$Winning_Party, title=colorBy,
                 layerId="colorLegend")
@@ -46,16 +46,16 @@ function(input, output, session) {
 
   # Show a popup at the given location
   showPopup <- function(municipality, lat, lng) {
-    selectedMunicipality <- df_2015[df_2015$Municipality == Municipality,]
+    selectedMunicipality <- df_2015[df_2015$Municipality == municipality,]
     content <- as.character(tagList(
       tags$h4("Pop:", as.integer(selectedMunicipality$Total)),
       tags$strong(HTML(sprintf("%s %s",
         selectedMunicipality$x, selectedMunicipality$y
       ))), tags$br(),
       sprintf("Median household income: %s", dollar(selectedMunicipality$Total_Average_income)), 
-      ags$br(),
+      tags$br()
     ))
-    leafletProxy("map") %>% addPopups(lng, lat, content, layerId = Municipality)
+    leafletProxy("map") %>% addPopups(selectedMunicipality$y, selectedMunicipality$x, content, layerId = selectedMunicipality$Municipality)
   }
 
   # When map is clicked, show a popup with city info
@@ -64,9 +64,8 @@ function(input, output, session) {
     event <- input$map_shape_click
     if (is.null(event))
       return()
-
     isolate({
-      showPopup(event$id, event$x, event$y)
+      showPopup(event$id, event$lat, event$lng)
     })
   })
 
