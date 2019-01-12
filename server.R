@@ -34,13 +34,13 @@ function(input, output, session) {
 
  
     pal <- colorFactor("viridis", df_2015$Winning_Party)
-    radius <- 30000
+    radius <- 5000
 
     leafletProxy("map", data = df_2015) %>%
       clearShapes() %>%
       addCircles(~y, ~x, radius=radius, layerId=~Municipality,
                  stroke=FALSE, fillOpacity=0.4, fillColor=pal(df_2015$Winning_Party)) %>%
-      addLegend("bottomleft", pal=pal, values=df_2015$Winning_Party, title=colorBy,
+      addLegend("bottomleft", pal=pal, values=df_2015$Winning_Party, title="Winning Party",
                 layerId="colorLegend")
   })
 

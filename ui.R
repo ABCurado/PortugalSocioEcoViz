@@ -47,15 +47,13 @@ navbarPage("Portugal SocioEco", id="nav",
 
   tabPanel("Data explorer",
     fluidRow(
-      column(3,
+      column(6,
         selectInput("municipality", "Municipality", df_2015$Municipality, multiple=TRUE)
-      )
-    ),
-    fluidRow(
-      column(1,
+      ),
+      column(3,
         numericInput("minScore", "Min Population", min=0, max=100, value=0)
       ),
-      column(1,
+      column(3,
         numericInput("maxScore", "Max Population", min=0, max=100, value=10000)
       )
     ),
