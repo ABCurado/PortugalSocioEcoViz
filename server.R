@@ -75,7 +75,13 @@ function(input, output, session) {
   showPopup <- function(municipality) {
     selectedMunicipality <- df_2015[df_2015$Municipality == municipality,]
     content <- as.character(tagList(
-      tags$h3("Election Result:"),
+      tags$h3((selectedMunicipality$Municipality)),
+      tags$b(),
+      sprintf("Unemployment Rate: %s %s", (selectedMunicipality$Unemployment_.Rate), ("%")),
+      tags$b(), 
+      tags$br(),
+      sprintf("Average Income: %s ", (selectedMunicipality$Total_Average_income)),
+      ("Euro"),
       tags$br(),
       tags$b(),
       sprintf("Uneducated Population: %s %s", round((selectedMunicipality$Fraction_Without_Education)*100, digits = 2), ("%")),
