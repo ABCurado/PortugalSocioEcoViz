@@ -34,7 +34,7 @@ function(input, output, session) {
 
  
     pal <- colorFactor("viridis", df_2015$Winning_Party)
-    radius <- 10000
+    radius <- 5000
 
     leafletProxy("map", data = df_2015) %>%
       clearShapes() %>%
