@@ -34,13 +34,13 @@ function(input, output, session) {
 
  
     pal <- colorFactor("viridis", df_2015$Winning_Party)
-    radius <- 30000
+    radius <- 10000
 
     leafletProxy("map", data = df_2015) %>%
       clearShapes() %>%
       addCircles(~y, ~x, radius=radius, layerId=~Municipality,
                  stroke=FALSE, fillOpacity=0.4, fillColor=pal(df_2015$Winning_Party)) %>%
-      addLegend("bottomleft", pal=pal, values=df_2015$Winning_Party, title=colorBy,
+      addLegend("bottomleft", pal=pal, values=df_2015$Winning_Party, title="Winning Party",
                 layerId="colorLegend")
   })
 
@@ -48,11 +48,13 @@ function(input, output, session) {
   showPopup <- function(municipality, lat, lng) {
     selectedMunicipality <- df_2015[df_2015$Municipality == municipality,]
     content <- as.character(tagList(
-      tags$h4("Pop:", as.integer(selectedMunicipality$Total)),
-      tags$strong(HTML(sprintf("%s %s",
-        selectedMunicipality$x, selectedMunicipality$y
-      ))), tags$br(),
-      sprintf("Median household income: %s", dollar(selectedMunicipality$Total_Average_income)), 
+      tags$h4((selectedMunicipality$Municipality)),
+      tags$b(),
+      sprintf("Unemployment Rate: %s %s", (selectedMunicipality$Unemployment_.Rate), ("%")),
+      tags$b(), 
+      tags$br(),
+      sprintf("Average Income: %s ", (selectedMunicipality$Total_Average_income)),
+      ("Euro"),
       tags$br()
     ))
     leafletProxy("map") %>% addPopups(selectedMunicipality$y, selectedMunicipality$x, content, layerId = selectedMunicipality$Municipality)
