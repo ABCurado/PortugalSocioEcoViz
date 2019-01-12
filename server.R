@@ -48,15 +48,31 @@ function(input, output, session) {
   showPopup <- function(municipality, lat, lng) {
     selectedMunicipality <- df_2015[df_2015$Municipality == municipality,]
     content <- as.character(tagList(
-      tags$h4((selectedMunicipality$Municipality)),
+      tags$h3((selectedMunicipality$Municipality)),
       tags$b(),
       sprintf("Unemployment Rate: %s %s", (selectedMunicipality$Unemployment_.Rate), ("%")),
       tags$b(), 
       tags$br(),
       sprintf("Average Income: %s ", (selectedMunicipality$Total_Average_income)),
       ("Euro"),
-      tags$br()
+      tags$br(),
+      tags$b(),
+      sprintf("Uneducated Population: %s %s", round((selectedMunicipality$Fraction_Without_Education)*100, digits = 2), ("%")),
+      tags$b(),
+      tags$h4("Election Result"),
+      tags$b(),
+      sprintf("PPD/PSD.CDS-PP: %s %s",round((selectedMunicipality$PPD.PSD.CDS.PP/selectedMunicipality$Total)*100, digits = 1) ,("%")), tags$b(),
+      tags$br(),
+      sprintf("PS: %s %s",round((selectedMunicipality$PS/selectedMunicipality$Total)*100, digits = 1) ,("%")), tags$b(),
+      tags$br(),
+      sprintf("PCP-PEV: %s %s",round((selectedMunicipality$PCP.PEV/selectedMunicipality$Total)*100, digits = 1) ,("%")), tags$b(),
+      tags$br(),
+      sprintf("BE: %s %s",round((selectedMunicipality$BE/selectedMunicipality$Total)*100, digits = 1) ,("%")), tags$b(),
+      tags$br(),
+      sprintf("Other: %s %s",round(((selectedMunicipality$Other+selectedMunicipality$NC+selectedMunicipality$PAN)/selectedMunicipality$Total)*100, digits = 1) ,("%")), tags$b()
+      
     ))
+      
     leafletProxy("map") %>% addPopups(selectedMunicipality$y, selectedMunicipality$x, content, layerId = selectedMunicipality$Municipality)
   }
 
