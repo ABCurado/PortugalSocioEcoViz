@@ -12,6 +12,9 @@ colorPicker <- function(municipality){
   party = df_2015[which(df_2015$Municipality == municipality),]["Winning_Party"]
   print(municipality)
   print(party)
+  if(dim(party)[1] == 0){
+    return(list(fillColor="grey", color="grey"))
+  }
   if (party == "PS"){
     return(list(fillColor="#cb416b", color="#cb416b"))
   }else if (party == "PPD/PSD.CDS-PP"){
