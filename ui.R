@@ -45,16 +45,16 @@ navbarPage("Portugal SocioEco", id="nav",
     )
   ),
 
-  tabPanel("Data explorer",
+  tabPanel("Socio-Economic Data",
     fluidRow(
       column(6,
-        selectInput("municipality", "Municipality", df_2015$Municipality, multiple=TRUE)
+        selectInput("municipality", "Municipality", sociotable$Municipality, multiple=TRUE)
       ),
       column(3,
-        numericInput("minScore", "Min Population", min=0, max=100, value=0)
+        numericInput("minScore", "Min Population", min=0, max=510000, value=0, step = 10000)
       ),
       column(3,
-        numericInput("maxScore", "Max Population", min=0, max=100, value=10000)
+        numericInput("maxScore", "Max Population", min=0, max=510000, value=510000, step = 10000)
       )
     ),
     hr(),

@@ -102,6 +102,7 @@ function(input, output, session) {
       
     ))
     return(content)
+#    leafletProxy("map") %>% addPopups(selectedMunicipality$x, selectedMunicipality$y, content, layerId = municipality)
 }
 
   # When map is clicked, show a popup with city info
@@ -121,7 +122,7 @@ function(input, output, session) {
 
   observe({
     Municipality <- if (is.null(input$Municipality)) character(0) else {
-      filter(cleantable, Municipality %in% input$Municipality) %>%
+      filter(sociotable, Municipality %in% input$Municipality) %>%
         `$`('City') %>%
         unique() %>%
         sort()
@@ -130,12 +131,28 @@ function(input, output, session) {
     updateSelectInput(session, "Municipality", choices = Municipality,
       selected = stillSelected)
   })
-
+  
+  observe({
+    if (is.null(input$goto))
+      return()
+    isolate({
+      map <- leafletProxy("map")
+      map %>% clearPopups()
+      dist <- 0.5
+      munic <- input$goto$munic
+      lat <- input$goto$lat
+      lng <- input$goto$lng
+      showPopup(munic)
+      map %>% fitBounds(lng - dist, lat - dist, lng + dist, lat + dist)
+    })
+  })
+  
+  
   output$municipTable <- DT::renderDataTable({
-    df <- cleantable %>%
+    df <- sociotable %>%
       filter(
-        Total >= input$minScore,
-        Total <= input$maxScore,
+        Population >= input$minScore,
+        Population <= input$maxScore,
         is.null(input$municipality) | Municipality %in% input$municipality,
       ) %>%
       mutate(Action = paste('<a class="go-map" href="" data-lat="', x, '" data-long="', y, '"><i class="fa fa-crosshairs"></i></a>', sep=""))
