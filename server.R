@@ -155,7 +155,7 @@ function(input, output, session) {
         Population <= input$maxScore,
         is.null(input$municipality) | Municipality %in% input$municipality,
       ) %>%
-      mutate(Action = paste('<a class="go-map" href="" data-lat="', x, '" data-long="', y, '"><i class="fa fa-crosshairs"></i></a>', sep=""))
+      mutate(Action = paste('<a class="go-map" href="" data-lat="',  '" data-long="',  '"><i class="fa fa-crosshairs"></i></a>', sep=""))
     action <- DT::dataTableAjax(session, df)
 
     DT::datatable(df, options = list(ajax = list(url = action)), escape = FALSE)

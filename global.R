@@ -44,9 +44,10 @@ sociotable <- select (sociotable,-c(X,NC,PAN, Total, Winning_Party, Winning_Part
                                     Without_Education, Basic_First_Cycle, Basic_Second_Cycle, Basic_Third_Cycle,
                                     Secondary, Superior, Fraction_Without_Education, Fraction_Basic_First_Cycle,
                                     Fraction_Basic_Second_Cycle, Fraction_Basic_Third_Cycle, Fraction_Secondary,
-                                    Fraction_Superior,Unemployment_Rate, Coordinates, Total_0.14, Total_15.65 ))
+                                    Fraction_Superior,Unemployment_Rate, Coordinates, Total_0.14, Total_15.65, x, y ))
 
-
+sociotable <- sociotable[c("Municipality", "BE", "PCP.PEV", "PPD.PSD.CDS.PP", "PS", "Others", "Turnout",
+                           "Population", "Average Income", "Unemployment Rate", "Uneducated Population")]
 
 geojson <- readLines("data/portugal_municipios.geojson") %>%
   paste(collapse = "\n")  %>%
