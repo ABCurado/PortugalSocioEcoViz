@@ -1,12 +1,10 @@
 library(dplyr)
 library(rjson)
 library(data.table)
-#df <- read.csv('data/dataframe_2015.csv', header = TRUE, sep = ',')
-#read.csv('data/dataframe_2015.csv', header = TRUE, sep = ',')
+#df <- read.csv('data/dataframe_2015_small.csv', header = TRUE, sep = ',')
 #saveRDS(df, file="data/dataframe_2015.rds")
 
 #df <- read.csv('data/dataframe_2011.csv', header = TRUE, sep = ',')
-#read.csv('data/dataframe_2011.csv', header = TRUE, sep = ',')
 #saveRDS(df, file="data/dataframe_2011.rds")
 
 df_2011 <- readRDS("data/dataframe_2011.rds")
@@ -49,10 +47,7 @@ sociotable <- select (sociotable,-c(X,NC,PAN, Total, Winning_Party, Winning_Part
 sociotable <- sociotable[c("Municipality", "BE", "PCP.PEV", "PPD.PSD.CDS.PP", "PS", "Others", "Turnout",
                            "Population", "Average Income", "Unemployment Rate", "Uneducated Population")]
 
-geojson <- readLines("data/portugal_municipios.geojson") %>%
+geojson <- readLines("data/portugal_municipios_small.geojson") %>%
   paste(collapse = "\n")  %>%
   fromJSON()
-
-#geojson2 <- geojsonio::geojson_read("data/portugal_municipios.geojson",
-#                              what = "sp")
 

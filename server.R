@@ -10,8 +10,6 @@ set.seed(100)
 
 colorPicker <- function(municipality){
   party = df_2015[which(df_2015$Municipality == municipality),]["Winning_Party"]
-  print(municipality)
-  print(party)
   if(dim(party)[1] == 0){
     return(list(fillColor="grey", color="grey"))
   }
@@ -41,7 +39,6 @@ function(input, output, session) {
   })
   
   output$scatterCollegeIncome <- renderPlot({
-    # If no zipcodes are in view, don't plot
     print(xyplot(Total_Average_income ~ Fraction_Superior, data = df_2015))
   })
 
@@ -102,9 +99,17 @@ function(input, output, session) {
       
     ))
     return(content)
-#    leafletProxy("map") %>% addPopups(selectedMunicipality$x, selectedMunicipality$y, content, layerId = municipality)
 }
-
+  showPopupAtXandY <- function(municipality) {
+    selectedMunicipality <- df_2015[df_2015$Municipality == municipality,]
+    dist <- 0.5
+    lng <- selectedMunicipality$y
+    lat <- selectedMunicipality$x
+    leafletProxy("map") %>% 
+      clearShapes() %>% 
+      addPopups(lng, lat, showPopup(municipality), layerId = selectedMunicipality$Municipality ) %>%
+      fitBounds(lng - dist, lat - dist, lng + dist, lat + dist)
+  }
   # When map is clicked, show a popup with city info
   observe({
     leafletProxy("map") %>% clearPopups()
@@ -136,14 +141,8 @@ function(input, output, session) {
     if (is.null(input$goto))
       return()
     isolate({
-      map <- leafletProxy("map")
-      map %>% clearPopups()
-      dist <- 0.5
-      munic <- input$goto$munic
-      lat <- input$goto$lat
-      lng <- input$goto$lng
-      showPopup(munic)
-      map %>% fitBounds(lng - dist, lat - dist, lng + dist, lat + dist)
+      munic <- input$goto$lat
+      showPopupAtXandY(munic)
     })
   })
   
@@ -155,7 +154,7 @@ function(input, output, session) {
         Population <= input$maxScore,
         is.null(input$municipality) | Municipality %in% input$municipality,
       ) %>%
-      mutate(Action = paste('<a class="go-map" href="" data-lat="',  '" data-long="',  '"><i class="fa fa-crosshairs"></i></a>', sep=""))
+      mutate(Action = paste('<a class="go-map" href="" data-lat="', Municipality ,'"><i class="fa fa-crosshairs"></i></a>', sep=""))
     action <- DT::dataTableAjax(session, df)
 
     DT::datatable(df, options = list(ajax = list(url = action)), escape = FALSE)
