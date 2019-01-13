@@ -12,7 +12,8 @@ library(data.table)
 df_2011 <- readRDS("data/dataframe_2011.rds")
 df_2015 <- readRDS("data/dataframe_2015.rds")
 sapply(df_2015, class)
-
+df_2015$Municipality <- as.character(df_2015$Municipality)
+Encoding(df_2015$Municipality) <- "UTF-8"
 cleantable <- df_2015
 
 
