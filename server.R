@@ -37,8 +37,7 @@ function(input, output, session) {
   })
 
   output$scatterSocioEco <- renderPlot({
-      plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("green")) %>%
-      points(x=list(5.0,5.0),y=list(5.0,5.0), pch = 10, cex = 4, lwd = 4, col=c("red"))
+    plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("green"))
   })
 
 
@@ -120,14 +119,20 @@ function(input, output, session) {
     isolate({
       output$diffPlot <- renderPlot({
         
-        print(barplot(height = as.matrix(df_diff[df_diff$Municipality==event$properties$name_2,c("BE","PCP", "PSD","PS", "Others")]),
-                      main = df_diff[df_diff$Municipality==event$properties$name_2,"Municipality"],
+        barplot(height = as.matrix(df_diff[df_diff$Municipality==event$properties$name_2,c("BE","PCP", "PSD","PS", "Others")]),
+                      main = "Change in % votes from 2011",
                       horiz = FALSE,
                       beside = TRUE,
                       ylab = "in Percentage Points",
                       #                  legend.text = c("BE","PCP.PEV", "PPD","PS", "Others"),
                       col = c("#ff000d", "#840000","#fdaa48","#cb416b","grey")
-        ))
+        )
+        output$scatterSocioEco <- renderPlot({
+          plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("green")) %>%
+            points(x=df_2015[df_2015$Municipality==event$properties$name_2,input$x_value],
+                   y=df_2015[df_2015$Municipality==event$properties$name_2,input$y_value], 
+                   pch = 10, cex = 4, lwd = 4, col=c("red"))
+        })
       })
       })
   })
@@ -154,14 +159,20 @@ function(input, output, session) {
       showPopupAtXandY(munic)
       output$diffPlot <- renderPlot({
         
-        print(barplot(height = as.matrix(df_diff[df_diff$Municipality==munic,c("BE","PCP", "PSD","PS", "Others")]),
+       barplot(height = as.matrix(df_diff[df_diff$Municipality==munic,c("BE","PCP", "PSD","PS", "Others")]),
                       main = df_diff[df_diff$Municipality==munic,"Municipality"],
                       horiz = FALSE,
                       beside = TRUE,
                       ylab = "in Percentage Points",
                       #                  legend.text = c("BE","PCP.PEV", "PPD","PS", "Others"),
                       col = c("#ff000d", "#840000","#fdaa48","#cb416b","grey")
-        ))
+        )
+      })
+      output$scatterSocioEco <- renderPlot({
+        plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("green")) %>%
+          points(x=df_2015[df_2015$Municipality==munic,input$x_value],
+                 y=df_2015[df_2015$Municipality==munic,input$y_value], 
+                 pch = 10, cex = 4, lwd = 4, col=c("red"))
       })
     })
   })

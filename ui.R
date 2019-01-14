@@ -34,8 +34,9 @@ navbarPage("Portugal SocioEco", id="nav",
         selectInput("x_value", "X-axis", vars),
         selectInput("y_value", "Y-axis", vars, selected = "Total_Average_income"),
 
-        plotOutput("diffPlot"),
-        plotOutput("scatterSocioEco", height = 250)
+        plotOutput("scatterSocioEco", height = 250),
+        plotOutput("diffPlot")
+        
       ),
 
       tags$div(id="cite",
