@@ -3,7 +3,6 @@ library(leaflet)
 # Choices for drop-downs
 vars <- c(
   "Young people%" = "Fraction_0.14",
-  "Winning Party" = "Winning_Party",
   "Population Size" = "Total",
   "Total Average Income" = "Total_Average_income",
   "Unemployment Rate" = "Unemployment_.Rate",
@@ -32,11 +31,11 @@ navbarPage("Portugal SocioEco", id="nav",
 
         h2("Explorer"),
 
-        selectInput("color", "Color", vars),
-        selectInput("size", "Size", vars, selected = "adultpop"),
+        selectInput("x_value", "X-axis", vars),
+        selectInput("y_value", "Y-axis", vars, selected = "Total_Average_income"),
 
-        plotOutput("histCentile", height = 200),
-        plotOutput("scatterCollegeIncome", height = 250)
+        textOutput("textMun"),
+        plotOutput("scatterSocioEco", height = 250)
       ),
 
       tags$div(id="cite",
