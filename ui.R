@@ -61,5 +61,14 @@ navbarPage("Portugal SocioEco", id="nav",
     DT::dataTableOutput("municipTable")
   ),
 
-  conditionalPanel("false", icon("crosshair"))
+  conditionalPanel("false", icon("crosshair")),
+  
+  # Election results ######################################
+  
+  tabPanel("Election Results", 
+           fluidRow(
+             column(width = 6, plotOutput(outputId = "pieplot_results")),
+             column(width = 4, DT::dataTableOutput("results_table"))
+           )
+  )
 )

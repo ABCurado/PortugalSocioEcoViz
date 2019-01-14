@@ -189,4 +189,17 @@ function(input, output, session) {
 
     DT::datatable(df, options = list(ajax = list(url = action)), escape = FALSE)
   })
+  
+  output$pieplot_results <- renderPlot({
+    pie(pieplot_values, 
+        labels = parties, 
+        main="Voting Percentages", 
+        col=c("blue", "#840000", "#fdaa48", "#cb416b", "grey"),
+        radius = 1)
+    
+  })
+  
+  output$results_table <- DT::renderDataTable({
+    DT::datatable(results_table, options = list(dom = 't'), rownames = FALSE)
+  })
 }

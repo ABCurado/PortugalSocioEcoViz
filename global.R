@@ -62,3 +62,39 @@ geojson <- readLines("data/portugal_municipios_small.geojson") %>%
   paste(collapse = "\n")  %>%
   fromJSON()
 
+######### party explorer tab ############
+
+parties <- list("BE", "PCP.PEV", "PPD/PSD.CDS.PP", "PS", "Others")
+
+copy_cleantable <- copy(cleantable)
+party_columns <- c("Municipality", "BE", "PCP.PEV", "PPD.PSD.CDS.PP", "PS", "Others", "Winning_Party")
+pieplot_values <- colSums(cleantable[,c("BE", "PCP.PEV", "PPD.PSD.CDS.PP", "PS", "Others")])
+
+results_table <- table(copy_cleantable[c("Winning_Party")])
+results_table <- data.frame(data=results_table)
+names(results_table)<-c("Party","Municipalty Victories")
+
+df_temp<-data.frame("BE","0")
+names(df_temp)<-c("Party","Municipalty Victories")
+results_table <- rbind(results_table, df_temp)
+
+df_temp<-data.frame("Others","0")
+names(df_temp)<-c("Party","Municipalty Victories")
+results_table <- rbind(results_table, df_temp)
+
+results_table$`Municipalty Victories` <- sapply(results_table$`Municipalty Victories`, as.numeric)
+votes <- list(pieplot_values[[2]], pieplot_values[[3]], pieplot_values[[4]], pieplot_values[[1]], pieplot_values[[5]])
+
+results_table$`Total Votes` <- votes
+results_table$`Total Votes` <- sapply(results_table$`Total Votes`, as.numeric)
+
+
+total_values <- colSums(results_table[,c("Total Votes","Municipalty Victories")])
+
+results_table$Party <- sapply(results_table$Party, as.character)
+total_values_list <- list("Total", total_values[2], total_values[1])
+
+results_table[nrow(results_table) + 1,] = total_values_list
+
+
+
