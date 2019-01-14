@@ -28,13 +28,11 @@ function(input, output, session) {
 
   ## Interactive Map ###########################################
 
+
   # Create the map
   output$map <- renderLeaflet({
     leaflet() %>%
-      addTiles(
-        urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
-        attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
-      ) %>%
+      addProviderTiles(providers$Stamen.Toner) %>%
       setView(lng = -13.1393366, lat = 38.7222524, zoom = 5) 
   })
   # create the barplot, which shows the difference between years
@@ -50,6 +48,11 @@ function(input, output, session) {
                   col = c("#ff000d", "#840000","#fdaa48","#cb416b","grey")
                   ))
   })
+    output$scatterSocioEco <- renderPlot({
+      plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1)
+      points(x=0,y=0, pch = 10, cex = 4, lwd = 4)
+  })
+
 
   # This observer is responsible for maintaining the circles and legend,
   # according to the variables the user has chosen to map to color and size.
@@ -64,17 +67,17 @@ function(input, output, session) {
                                     return(row)
                       })
 
-    leafletProxy("map", data = df_2015) %>%
+    leafletProxy("map",data = df_2015) %>%
       clearShapes() %>%
       addGeoJSONv2(geojson, 
-                   layerId=~Municipality,
-                   fillOpacity=1,
+                   layerId=df_2015$Municipality,
+                   fillOpacity=0.6,
                    opacity =1,
                    labelProperty='name_2',
                    popupProperty='popup',
                    highlightOptions = highlightOptions(
                      weight=2, 
-                     fillOpacity=0.6, opacity =1,
+                     fillOpacity=1, opacity =1,
                      bringToFront=TRUE, sendToBack=TRUE)) %>%
       addLegend("bottomright", pal=pal, values=c("PPD/PSD.CDS-PP","PS","PCP-PEV", "BE", "Others"), title="Party",
                 layerId="colorLegend")
@@ -115,23 +118,23 @@ function(input, output, session) {
     lng <- selectedMunicipality$y
     lat <- selectedMunicipality$x
     leafletProxy("map") %>% 
-      clearShapes() %>% 
       addPopups(lng, lat, showPopup(municipality), layerId = selectedMunicipality$Municipality ) %>%
       fitBounds(lng - dist, lat - dist, lng + dist, lat + dist)
   }
-  # When map is clicked, show a popup with city info
+  
+  # When map is clicked, 
   observe({
     leafletProxy("map") %>% clearPopups()
-    event <- input$map_shape_click
-    print(event)
+    event <- input$map_geojson_click
+
+    print(event$properties$name_2)
     if (is.null(event))
       return()
     isolate({
-      showPopup(event$id, event$lat, event$lng)
+      output$textMun <- renderText({event$properties$name_2})
     })
   })
-
-
+  
   ## Data Explorer ###########################################
 
   observe({
