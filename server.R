@@ -45,7 +45,7 @@ function(input, output, session) {
   # This observer is responsible for maintaining the circles and legend,
   # according to the variables the user has chosen to map to color and size.
   observe({
-    pal <- colorFactor(c("#fdaa48","#cb416b","#840000"), c("PPD/PSD.CDS-PP","PS","PCP-PEV"),  ordered = TRUE)
+    pal <- colorFactor(c("#fdaa48","#cb416b","#840000", "#ff000d","grey"), c("PPD/PSD.CDS-PP","PS","PCP-PEV", "BE", "Others"),  ordered = TRUE)
 
 
     geojson$features <- lapply(geojson$features,
@@ -67,7 +67,7 @@ function(input, output, session) {
                      weight=2, 
                      fillOpacity=1, opacity =1,
                      bringToFront=TRUE, sendToBack=TRUE)) %>%
-      addLegend("bottomleft", pal=pal, values=df_2015$Winning_Party, title="Winning Party",
+      addLegend("bottomleft", pal=pal, values=c("PPD/PSD.CDS-PP","PS","PCP-PEV", "BE", "Others"), title="Party",
                 layerId="colorLegend")
   })
 
@@ -118,8 +118,18 @@ function(input, output, session) {
     if (is.null(event))
       return()
     isolate({
-      output$textMun <- renderText({event$properties$name_2})
-    })
+      output$diffPlot <- renderPlot({
+        
+        print(barplot(height = as.matrix(df_diff[df_diff$Municipality==event$properties$name_2,c("BE","PCP", "PSD","PS", "Others")]),
+                      main = df_diff[df_diff$Municipality==event$properties$name_2,"Municipality"],
+                      horiz = FALSE,
+                      beside = TRUE,
+                      ylab = "in Percentage Points",
+                      #                  legend.text = c("BE","PCP.PEV", "PPD","PS", "Others"),
+                      col = c("#ff000d", "#840000","#fdaa48","#cb416b","grey")
+        ))
+      })
+      })
   })
   
   ## Data Explorer ###########################################
@@ -142,9 +152,19 @@ function(input, output, session) {
     isolate({
       munic <- input$goto$lat
       showPopupAtXandY(munic)
+      output$diffPlot <- renderPlot({
+        
+        print(barplot(height = as.matrix(df_diff[df_diff$Municipality==munic,c("BE","PCP", "PSD","PS", "Others")]),
+                      main = df_diff[df_diff$Municipality==munic,"Municipality"],
+                      horiz = FALSE,
+                      beside = TRUE,
+                      ylab = "in Percentage Points",
+                      #                  legend.text = c("BE","PCP.PEV", "PPD","PS", "Others"),
+                      col = c("#ff000d", "#840000","#fdaa48","#cb416b","grey")
+        ))
+      })
     })
   })
-  
   
   output$municipTable <- DT::renderDataTable({
     df <- sociotable %>%

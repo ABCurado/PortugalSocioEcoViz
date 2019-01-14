@@ -47,6 +47,17 @@ sociotable <- select (sociotable,-c(X,NC,PAN, Total, Winning_Party, Winning_Part
 sociotable <- sociotable[c("Municipality", "BE", "PCP.PEV", "PPD.PSD.CDS.PP", "PS", "Others", "Turnout",
                            "Population", "Average Income", "Unemployment Rate", "Uneducated Population")]
 
+
+## Preparing a table for the percentage points difference btw. 2011 and 2015
+df_diff <- df_2015 [c("Municipality", "BE", "PCP.PEV", "PPD.PSD.CDS.PP", "PS", "Others")]
+names(df_diff)[names(df_diff) == 'PPD.PSD.CDS.PP'] <- 'PSD'
+names(df_diff)[names(df_diff) == 'PCP.PEV'] <- 'PCP'
+df_diff$BE <- (df_2015$BE/df_2015$Total - df_2011$BE/df_2011$Total)*100
+df_diff$PCP <- (df_2015$PCP.PEV/df_2015$Total - df_2011$PCP.PEV/df_2011$Total)*100
+df_diff$PSD <- (df_2015$PPD.PSD.CDS.PP/df_2015$Total - (df_2011$CDS.PP + df_2011$PPD.PSD)/df_2011$Total)*100
+df_diff$PS <- (df_2015$PS/df_2015$Total - df_2011$PS/df_2011$Total)*100
+df_diff$Others <- ((df_2015$Others+df_2015$NC+df_2015$PAN)/df_2015$Total - (df_2011$Others+df_2011$PAN)/df_2011$Total)*100
+
 geojson <- readLines("data/portugal_municipios_small.geojson") %>%
   paste(collapse = "\n")  %>%
   fromJSON()

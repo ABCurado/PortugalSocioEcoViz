@@ -29,17 +29,17 @@ navbarPage("Portugal SocioEco", id="nav",
         draggable = TRUE, top = 60, left = "auto", right = 20, bottom = "auto",
         width = 330, height = "auto",
 
-        h2("Explorer"),
+        h2("Parliament Election 2015"),
 
         selectInput("x_value", "X-axis", vars),
         selectInput("y_value", "Y-axis", vars, selected = "Total_Average_income"),
 
-        textOutput("textMun"),
+        plotOutput("diffPlot"),
         plotOutput("scatterSocioEco", height = 250)
       ),
 
       tags$div(id="cite",
-        'Data compiled for IP Project, Curado et al.(2018)'
+        'Data compiled for IP Project, Curado et al.(2019)'
       )
     )
   ),
