@@ -37,15 +37,24 @@ function(input, output, session) {
       ) %>%
       setView(lng = -13.1393366, lat = 38.7222524, zoom = 5) 
   })
-  
+  # create the barplot, which shows the difference between years
+  # hardcoded Lisboa needs to be changed with input from click on map
   output$scatterCollegeIncome <- renderPlot({
-    print(xyplot(Total_Average_income ~ Fraction_Superior, data = df_2015))
+    
+    print(barplot(height = as.matrix(df_diff[df_diff$Municipality=="Lisboa",c("BE","PCP", "PSD","PS", "Others")]),
+                  main = df_diff[df_diff$Municipality=="Lisboa","Municipality"],
+                  horiz = FALSE,
+                  beside = TRUE,
+                  ylab = "in Percentage Points",
+#                  legend.text = c("BE","PCP.PEV", "PPD","PS", "Others"),
+                  col = c("#ff000d", "#840000","#fdaa48","#cb416b","grey")
+                  ))
   })
 
   # This observer is responsible for maintaining the circles and legend,
   # according to the variables the user has chosen to map to color and size.
   observe({
-    pal <- colorFactor(c("#fdaa48","#cb416b","#840000"), c("PPD/PSD.CDS-PP","PS","PCP-PEV"),  ordered = TRUE)
+    pal <- colorFactor(c("#fdaa48","#cb416b","#840000", "#ff000d","grey"), c("PPD/PSD.CDS-PP","PS","PCP-PEV", "BE", "Others"),  ordered = TRUE)
 
 
     geojson$features <- lapply(geojson$features,
@@ -67,7 +76,7 @@ function(input, output, session) {
                      weight=2, 
                      fillOpacity=0.6, opacity =1,
                      bringToFront=TRUE, sendToBack=TRUE)) %>%
-      addLegend("bottomleft", pal=pal, values=df_2015$Winning_Party, title="Winning Party",
+      addLegend("bottomright", pal=pal, values=c("PPD/PSD.CDS-PP","PS","PCP-PEV", "BE", "Others"), title="Party",
                 layerId="colorLegend")
   })
 

@@ -30,7 +30,7 @@ navbarPage("Portugal SocioEco", id="nav",
         draggable = TRUE, top = 60, left = "auto", right = 20, bottom = "auto",
         width = 330, height = "auto",
 
-        h2("Explorer"),
+        h2("Parliament Election 2015"),
 
         selectInput("color", "Color", vars),
         selectInput("size", "Size", vars, selected = "adultpop"),
@@ -40,7 +40,7 @@ navbarPage("Portugal SocioEco", id="nav",
       ),
 
       tags$div(id="cite",
-        'Data compiled for IP Project, Curado et al.(2018)'
+        'Data compiled for IP Project, Curado et al.(2019)'
       )
     )
   ),
