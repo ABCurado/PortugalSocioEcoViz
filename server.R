@@ -36,13 +36,9 @@ function(input, output, session) {
       setView(lng = -13.1393366, lat = 38.7222524, zoom = 5) 
   })
 
-  observe({
-    val <- input$x_value
-    print(df_2015[val])
-  })
-    output$scatterSocioEco <- renderPlot({
-      plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1)
-      points(x=0,y=0, pch = 10, cex = 4, lwd = 4)
+  output$scatterSocioEco <- renderPlot({
+      plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("green")) %>%
+      points(x=list(5.0,5.0),y=list(5.0,5.0), pch = 10, cex = 4, lwd = 4, col=c("red"))
   })
 
 
@@ -119,7 +115,6 @@ function(input, output, session) {
     leafletProxy("map") %>% clearPopups()
     event <- input$map_geojson_click
 
-    print(event$properties$name_2)
     if (is.null(event))
       return()
     isolate({
