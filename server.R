@@ -37,17 +37,7 @@ function(input, output, session) {
   })
   # create the barplot, which shows the difference between years
   # hardcoded Lisboa needs to be changed with input from click on map
-  output$scatterCollegeIncome <- renderPlot({
-    
-    print(barplot(height = as.matrix(df_diff[df_diff$Municipality=="Lisboa",c("BE","PCP", "PSD","PS", "Others")]),
-                  main = df_diff[df_diff$Municipality=="Lisboa","Municipality"],
-                  horiz = FALSE,
-                  beside = TRUE,
-                  ylab = "in Percentage Points",
-#                  legend.text = c("BE","PCP.PEV", "PPD","PS", "Others"),
-                  col = c("#ff000d", "#840000","#fdaa48","#cb416b","grey")
-                  ))
-  })
+  
     output$scatterSocioEco <- renderPlot({
       plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1)
       points(x=0,y=0, pch = 10, cex = 4, lwd = 4)
@@ -79,7 +69,7 @@ function(input, output, session) {
                      weight=2, 
                      fillOpacity=1, opacity =1,
                      bringToFront=TRUE, sendToBack=TRUE)) %>%
-      addLegend("bottomright", pal=pal, values=c("PPD/PSD.CDS-PP","PS","PCP-PEV", "BE", "Others"), title="Party",
+      addLegend("bottomleft", pal=pal, values=c("PPD/PSD.CDS-PP","PS","PCP-PEV", "BE", "Others"), title="Party",
                 layerId="colorLegend")
   })
 
@@ -131,8 +121,18 @@ function(input, output, session) {
     if (is.null(event))
       return()
     isolate({
-      output$textMun <- renderText({event$properties$name_2})
-    })
+      output$diffPlot <- renderPlot({
+        
+        print(barplot(height = as.matrix(df_diff[df_diff$Municipality==event$properties$name_2,c("BE","PCP", "PSD","PS", "Others")]),
+                      main = df_diff[df_diff$Municipality==event$properties$name_2,"Municipality"],
+                      horiz = FALSE,
+                      beside = TRUE,
+                      ylab = "in Percentage Points",
+                      #                  legend.text = c("BE","PCP.PEV", "PPD","PS", "Others"),
+                      col = c("#ff000d", "#840000","#fdaa48","#cb416b","grey")
+        ))
+      })
+      })
   })
   
   ## Data Explorer ###########################################
@@ -155,9 +155,19 @@ function(input, output, session) {
     isolate({
       munic <- input$goto$lat
       showPopupAtXandY(munic)
+      output$diffPlot <- renderPlot({
+        
+        print(barplot(height = as.matrix(df_diff[df_diff$Municipality==munic,c("BE","PCP", "PSD","PS", "Others")]),
+                      main = df_diff[df_diff$Municipality==munic,"Municipality"],
+                      horiz = FALSE,
+                      beside = TRUE,
+                      ylab = "in Percentage Points",
+                      #                  legend.text = c("BE","PCP.PEV", "PPD","PS", "Others"),
+                      col = c("#ff000d", "#840000","#fdaa48","#cb416b","grey")
+        ))
+      })
     })
   })
-  
   
   output$municipTable <- DT::renderDataTable({
     df <- sociotable %>%
