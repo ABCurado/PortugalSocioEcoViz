@@ -11,7 +11,7 @@ vars <- c(
 )
 
 
-navbarPage("Portugal SocioEco", id="nav",
+navbarPage("Portugal Election 2015", id="nav",
   
   # Interactive Map Panel ######################################
   tabPanel("Interactive Map",
