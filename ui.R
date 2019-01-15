@@ -51,22 +51,22 @@ navbarPage("Portugal Election 2015", id="nav",
   tabPanel("Socio-Economic Data",
 fluidRow(
       column(3,
-             sliderInput("turnout", "Turnout:",
+             sliderInput("turnout", "Turnout  (%):",
                          min = min(sociotable$Turnout), max = max(sociotable$Turnout),
                          value = c(min(sociotable$Turnout),max(sociotable$Turnout)), 
                          step = 1)
-      ),column(3,
-             sliderInput("avg_income", "Average Income:",
-                         min = min(sociotable$`Average Income`), max = max(sociotable$`Average Income`),
-                         value = c(min(sociotable$`Average Income`),max(sociotable$`Average Income`)), 
-                         step = 10)
-      ),column(3,
-             sliderInput("unemployment", "Unemployment Rate:",
+      ), column(3,
+                sliderInput("age", "Young Population (%):",
+                            min = min(sociotable$`Young Population`), max = max(sociotable$`Young Population`),
+                            value = c(min(sociotable$`Young Population`),max(sociotable$`Young Population`)), 
+                            step = 1.0)
+      ), column(3,
+             sliderInput("unemployment", "Unemployment Rate (%):",
                          min = min(sociotable$`Unemployment Rate`), max = max(sociotable$`Unemployment Rate`),
                          value = c(min(sociotable$`Unemployment Rate`),max(sociotable$`Unemployment Rate`)), 
                          step = 1.0)
       ),column(3,
-             sliderInput("education", "Uneducated Population:",
+             sliderInput("education", "Uneducated Population (%):",
                          min = min(sociotable$`Uneducated Population`), max = max(sociotable$`Uneducated Population`),
                          value = c(min(sociotable$`Uneducated Population`),max(sociotable$`Uneducated Population`)), 
                          step = 1.0)
@@ -75,11 +75,16 @@ fluidRow(
       column(6,
              selectInput("municipality", "Municipality", sociotable$Municipality, multiple=TRUE)
       ),
-      column(6,
+      column(3,
              sliderInput("population", "Population:",
                          min = min(sociotable$Population), max = max(sociotable$Population),
                          value = c(min(sociotable$Population),max(sociotable$Population)), 
                          step = 1000)
+      ), column(3,
+              sliderInput("avg_income", "Average Income (€):",
+                          min = min(sociotable$`Average Income`), max = max(sociotable$`Average Income`),
+                          value = c(min(sociotable$`Average Income`),max(sociotable$`Average Income`)), 
+                          step = 10)
       )
     ),
     hr(),
