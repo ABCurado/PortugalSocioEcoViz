@@ -27,7 +27,7 @@ sociotable <- sociotable %>% mutate(
   PPD.PSD.CDS.PP = round((PPD.PSD.CDS.PP/Total)*100, digits =1),
   PS = round((PS/Total)*100, digits =1),
   Others = round(((Others+NC+PAN)/Total)*100, digits =1),
-  Turnout = round((Total/Total_Number_People_x)*100, digits =1),
+  Turnout = round((Total/(Total_Number_People_x*(1-Fraction_0.14)))*100, digits =1),
   Uneducated = round(Fraction_Without_Education*100, digits = 1),
   Young = round(Fraction_0.14*100, digits = 1)
 )
