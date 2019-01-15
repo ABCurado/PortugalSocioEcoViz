@@ -32,12 +32,12 @@ function(input, output, session) {
   # Create the map
   output$map <- renderLeaflet({
     leaflet() %>%
-      addProviderTiles(providers$Stamen.Toner) %>%
+      addProviderTiles(providers$Hydda.Base) %>%
       setView(lng = -13.1393366, lat = 38.7222524, zoom = 5) 
   })
 
   output$scatterSocioEco <- renderPlot({
-    plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("green"))
+    plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("black"), ann=FALSE, par(mar=c(0,0,0,0)))
   })
 
 
@@ -73,6 +73,7 @@ function(input, output, session) {
   # Show a popup at the given location
   showPopup <- function(municipality) {
     selectedMunicipality <- df_2015[df_2015$Municipality == municipality,]
+    print(municipality)
     content <- as.character(tagList(
       tags$h3((selectedMunicipality$Municipality)),
       tags$b(),
@@ -128,10 +129,10 @@ function(input, output, session) {
                       col = c("#ff000d", "#840000","#fdaa48","#cb416b","grey")
         )
         output$scatterSocioEco <- renderPlot({
-          plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("green")) %>%
+          plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("dark grey"), ann=FALSE, par(mar=c(0,0,0,0))) %>%
             points(x=df_2015[df_2015$Municipality==event$properties$name_2,input$x_value],
                    y=df_2015[df_2015$Municipality==event$properties$name_2,input$y_value], 
-                   pch = 10, cex = 4, lwd = 4, col=c("red"))
+                   pch = 20, cex =  1, lwd = 4, col=c("red"))
         })
       })
       })
@@ -169,10 +170,10 @@ function(input, output, session) {
         )
       })
       output$scatterSocioEco <- renderPlot({
-        plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("green")) %>%
+        plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("black"), ann=FALSE, par(mar=c(0,0,0,0))) %>%
           points(x=df_2015[df_2015$Municipality==munic,input$x_value],
                  y=df_2015[df_2015$Municipality==munic,input$y_value], 
-                 pch = 10, cex = 4, lwd = 4, col=c("red"))
+                 pch = 20, cex = 1, lwd = 4, col=c("red"))
       })
     })
   })
