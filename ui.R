@@ -2,18 +2,19 @@ library(leaflet)
 
 # Choices for drop-downs
 vars <- c(
-  "Young people%" = "Fraction_0.14",
-  "Population Size" = "Total",
-  "Total Average Income" = "Total_Average_income",
-  "Unemployment Rate" = "Unemployment_.Rate",
-  "Uneducated Percentage" = "Fraction_Without_Education"
+  "Young People in %" = "Young Population",
+  "Population Size" = "Population",
+  "Total Average Income" = "Average Income",
+  "Unemployment Rate" = "Unemployment Rate",
+  "Uneducated Population in %" = "Uneducated Population",
+  "Turnout" = "Turnout"
 )
 
 
 navbarPage("Portugal SocioEco", id="nav",
   
   # Interactive Map Panel ######################################
-  tabPanel("Interactive map",
+  tabPanel("Interactive Map",
     div(class="outer",
 
       tags$head(
@@ -33,7 +34,7 @@ navbarPage("Portugal SocioEco", id="nav",
         h2("Parliament Election 2015"),
 
         selectInput("x_value", "X-axis", vars),
-        selectInput("y_value", "Y-axis", vars, selected = "Total_Average_income"),
+        selectInput("y_value", "Y-axis", vars, selected = "Turnout"),
 
         plotOutput("scatterSocioEco", height = 200),
         plotOutput("diffPlot", height = 250)
@@ -47,7 +48,7 @@ navbarPage("Portugal SocioEco", id="nav",
   ),
   
   # DataTable Panel #####################################
-  tabPanel("Socio-Economic DataExplorer",
+  tabPanel("Socio-Economic Data",
 fluidRow(
       column(3,
              sliderInput("turnout", "Turnout:",
