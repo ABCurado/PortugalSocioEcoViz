@@ -208,7 +208,7 @@ function(input, output, session) {
     p <- barplot(height = results_2011$diff2015,
                  horiz = FALSE,
                  beside = TRUE,
-                 ylab = "Increase/Decrease in %Votes",
+                 ylab = "Increase/Decrease in Percentage Points",
                  names.arg = results_2011$Party,
                  col = colorPalette_02,
                  space=1.4, 
