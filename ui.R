@@ -11,7 +11,8 @@ vars <- c(
 
 
 navbarPage("Portugal SocioEco", id="nav",
-
+  
+  # Interactive Map Panel ######################################
   tabPanel("Interactive map",
     div(class="outer",
 
@@ -44,8 +45,9 @@ navbarPage("Portugal SocioEco", id="nav",
       )
     )
   ),
-
-  tabPanel("Socio-Economic Data",
+  
+  # DataTable Panel #####################################
+  tabPanel("Socio-Economic DataExplorer",
     fluidRow(
       column(6,
         selectInput("municipality", "Municipality", sociotable$Municipality, multiple=TRUE)
@@ -60,8 +62,6 @@ navbarPage("Portugal SocioEco", id="nav",
     hr(),
     DT::dataTableOutput("municipTable")
   ),
-
-  conditionalPanel("false", icon("crosshair")),
   
   # Election results ######################################
   
@@ -70,5 +70,6 @@ navbarPage("Portugal SocioEco", id="nav",
              column(width = 6, plotOutput(outputId = "pieplot_results")),
              column(width = 4, DT::dataTableOutput("results_table"))
            )
-  )
+  ),
+  conditionalPanel("false", icon("crosshair"))
 )

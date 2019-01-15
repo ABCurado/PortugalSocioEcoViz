@@ -2,6 +2,10 @@ input[type="number"] {
   max-width: 80%;
 }
 
+input[type=search] {
+  -webkit-appearance: textfield;
+}
+
 div.outer {
   position: fixed;
   top: 41px;
