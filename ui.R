@@ -14,7 +14,7 @@ vars <- c(
 navbarPage("Portugal SocioEco", id="nav",
   
   # Interactive Map Panel ######################################
-  tabPanel("Interactive map",
+  tabPanel("Interactive Map",
     div(class="outer",
 
       tags$head(
@@ -48,7 +48,7 @@ navbarPage("Portugal SocioEco", id="nav",
   ),
   
   # DataTable Panel #####################################
-  tabPanel("Socio-Economic DataExplorer",
+  tabPanel("Socio-Economic Data",
     fluidRow(
       column(6,
         selectInput("municipality", "Municipality", sociotable$Municipality, multiple=TRUE)
