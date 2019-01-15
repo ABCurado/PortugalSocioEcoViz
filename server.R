@@ -169,11 +169,14 @@ function(input, output, session) {
   output$municipTable <- DT::renderDataTable({
     df <- sociotable %>%
       filter(
-        Population >= input$minScore,
-        Population <= input$maxScore,
+        Population >= input$population[1], Population <= input$population[2],
+        `Average Income` >= input$avg_income[1], `Average Income` <= input$avg_income[2],
+        Turnout >= input$turnout[1], Turnout <= input$turnout[2],
+        `Unemployment Rate` >= input$unemployment[1], `Unemployment Rate` <= input$unemployment[2],
+        `Uneducated Population` >= input$education[1], `Uneducated Population` <= input$education[2],
         is.null(input$municipality) | Municipality %in% input$municipality
       ) %>%
-      mutate( paste('<a class="go-map" href="" data-lat="', Municipality ,'"><i class="fa fa-2x fa-crosshairs"></i></a>', sep=""))
+      mutate( Location = paste('<a class="go-map" href="" data-lat="', Municipality ,'"><i class="fa fa-2x fa-crosshairs"></i></a>', sep=""))
     action <- DT::dataTableAjax(session, df)
 
     DT::datatable(df, options = list(ajax = list(url = action)), escape = FALSE)

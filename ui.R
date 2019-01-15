@@ -48,15 +48,37 @@ navbarPage("Portugal SocioEco", id="nav",
   
   # DataTable Panel #####################################
   tabPanel("Socio-Economic DataExplorer",
-    fluidRow(
+fluidRow(
+      column(3,
+             sliderInput("turnout", "Turnout:",
+                         min = min(sociotable$Turnout), max = max(sociotable$Turnout),
+                         value = c(min(sociotable$Turnout),max(sociotable$Turnout)), 
+                         step = 1)
+      ),column(3,
+             sliderInput("avg_income", "Average Income:",
+                         min = min(sociotable$`Average Income`), max = max(sociotable$`Average Income`),
+                         value = c(min(sociotable$`Average Income`),max(sociotable$`Average Income`)), 
+                         step = 10)
+      ),column(3,
+             sliderInput("unemployment", "Unemployment Rate:",
+                         min = min(sociotable$`Unemployment Rate`), max = max(sociotable$`Unemployment Rate`),
+                         value = c(min(sociotable$`Unemployment Rate`),max(sociotable$`Unemployment Rate`)), 
+                         step = 1.0)
+      ),column(3,
+             sliderInput("education", "Uneducated Population:",
+                         min = min(sociotable$`Uneducated Population`), max = max(sociotable$`Uneducated Population`),
+                         value = c(min(sociotable$`Uneducated Population`),max(sociotable$`Uneducated Population`)), 
+                         step = 1.0)
+      )
+    ),    fluidRow(
       column(6,
-        selectInput("municipality", "Municipality", sociotable$Municipality, multiple=TRUE)
+             selectInput("municipality", "Municipality", sociotable$Municipality, multiple=TRUE)
       ),
-      column(3,
-        numericInput("minScore", "Min Population", min=0, max=510000, value=0, step = 10000)
-      ),
-      column(3,
-        numericInput("maxScore", "Max Population", min=0, max=510000, value=510000, step = 10000)
+      column(6,
+             sliderInput("population", "Population:",
+                         min = min(sociotable$Population), max = max(sociotable$Population),
+                         value = c(min(sociotable$Population),max(sociotable$Population)), 
+                         step = 1000)
       )
     ),
     hr(),
