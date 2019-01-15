@@ -2,6 +2,10 @@ input[type="number"] {
   max-width: 80%;
 }
 
+input[type=search] {
+  -webkit-appearance: textfield;
+}
+
 div.outer {
   position: fixed;
   top: 41px;
@@ -25,7 +29,7 @@ h1, h2, h3, h4 { font-weight: 400; }
   padding: 0 20px 20px 20px;
   cursor: move;
   /* Fade out while not hovering */
-  opacity: 0.75;
+  opacity: 0.85;
   zoom: 0.9;
   transition: opacity 500ms 1s;
 }

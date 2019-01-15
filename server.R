@@ -7,6 +7,7 @@ library(dplyr)
 
 # Leaflet bindings are a bit slow; for now we'll just sample to compensate
 set.seed(100)
+colorPalette <- c("#ff000d", "#840000","#fdaa48","#cb416b","grey")
 
 colorPicker <- function(municipality){
   party = df_2015[which(df_2015$Municipality == municipality),]["Winning_Party"]
@@ -26,36 +27,22 @@ colorPicker <- function(municipality){
 
 function(input, output, session) {
 
-  ## Interactive Map ###########################################
-
-
+  # Interactive Map Panel #####################################
   # Create the map
   output$map <- renderLeaflet({
-    leaflet() %>%
-      addProviderTiles(providers$Stamen.Toner) %>%
-      setView(lng = -13.1393366, lat = 38.7222524, zoom = 5) 
-  })
-
-  output$scatterSocioEco <- renderPlot({
-    plot(sociotable[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("green"))
-  })
-
-
-  # This observer is responsible for maintaining the circles and legend,
-  # according to the variables the user has chosen to map to color and size.
-  observe({
-    pal <- colorFactor(c("#fdaa48","#cb416b","#840000", "#ff000d","grey"), c("PPD/PSD.CDS-PP","PS","PCP-PEV", "BE", "Others"),  ordered = TRUE)
-
-
+    pal <- colorFactor(colorPalette, c("BE","PCP-PEV","PPD/PSD.CDS-PP", "PS", "Others"),  ordered = TRUE)
+    
+    
     geojson$features <- lapply(geojson$features,
-                                  function(row) {
-                                    row$properties$popup <- showPopup(row$properties$name_2)
-                                    row$properties$style <- colorPicker(row$properties$name_2)
-                                    return(row)
-                      })
-
-    leafletProxy("map",data = df_2015) %>%
-      clearShapes() %>%
+                               function(row) {
+                                 row$properties$popup <- showPopup(row$properties$name_2)
+                                 row$properties$style <- colorPicker(row$properties$name_2)
+                                 return(row)
+                               })
+    
+    leaflet() %>%
+      addProviderTiles(providers$Hydda.Base) %>%
+      setView(lng = -13.1393366, lat = 38.7222524, zoom = 5) %>%
       addGeoJSONv2(geojson, 
                    layerId=df_2015$Municipality,
                    fillOpacity=0.6,
@@ -69,10 +56,10 @@ function(input, output, session) {
       addLegend("bottomleft", pal=pal, values=c("PPD/PSD.CDS-PP","PS","PCP-PEV", "BE", "Others"), title="Party",
                 layerId="colorLegend")
   })
-
   # Show a popup at the given location
   showPopup <- function(municipality) {
     selectedMunicipality <- df_2015[df_2015$Municipality == municipality,]
+    print(municipality)
     content <- as.character(tagList(
       tags$h3((selectedMunicipality$Municipality)),
       tags$b(),
@@ -101,7 +88,13 @@ function(input, output, session) {
       
     ))
     return(content)
-}
+  }
+  
+  output$scatterSocioEco <- renderPlot({
+    plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("black"), ann=FALSE, par(mar=c(2,2,0,0)))
+  })
+
+
   showPopupAtXandY <- function(municipality) {
     selectedMunicipality <- df_2015[df_2015$Municipality == municipality,]
     dist <- 0.5
@@ -116,25 +109,24 @@ function(input, output, session) {
   observe({
     leafletProxy("map") %>% clearPopups()
     event <- input$map_geojson_click
-
+    municip <- event$properties$name_2
     if (is.null(event))
       return()
     isolate({
       output$diffPlot <- renderPlot({
         
-        barplot(height = as.matrix(df_diff[df_diff$Municipality==event$properties$name_2,c("BE","PCP", "PSD","PS", "Others")]),
+        barplot(height = as.matrix(df_diff[df_diff$Municipality==municip,c("BE","PCP", "PSD","PS", "Others")]),
                       main = "Difference from 2011",
                       horiz = FALSE,
                       beside = TRUE,
                       ylab = "in Percentage Points",
-                      #                  legend.text = c("BE","PCP.PEV", "PPD","PS", "Others"),
-                      col = c("#ff000d", "#840000","#fdaa48","#cb416b","grey")
+                      col = colorPalette
         )
         output$scatterSocioEco <- renderPlot({
-          plot(sociotable[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("green")) %>%
-            points(x=sociotable[sociotable$Municipality==event$properties$name_2,input$x_value],
-                   y=sociotable[sociotable$Municipality==event$properties$name_2,input$y_value], 
-                   pch = 10, cex = 4, lwd = 4, col=c("red"))
+          plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("dark grey"), ann=FALSE, par(mar=c(2,2,0,0))) %>%
+            points(x=df_2015[df_2015$Municipality==municip,input$x_value],
+                   y=df_2015[df_2015$Municipality==municip,input$y_value], 
+                   pch = 20, cex =  1, lwd = 4, col=c("red"))
         })
       })
       })
@@ -145,7 +137,6 @@ function(input, output, session) {
   observe({
     Municipality <- if (is.null(input$Municipality)) character(0) else {
       filter(sociotable, Municipality %in% input$Municipality) %>%
-        `$`('City') %>%
         unique() %>%
         sort()
     }
@@ -158,24 +149,22 @@ function(input, output, session) {
     if (is.null(input$goto))
       return()
     isolate({
-      munic <- input$goto$lat
-      showPopupAtXandY(munic)
+      municip <- input$goto$lat
+      showPopupAtXandY(municip)
       output$diffPlot <- renderPlot({
-        
-       barplot(height = as.matrix(df_diff[df_diff$Municipality==munic,c("BE","PCP", "PSD","PS", "Others")]),
-                      main = df_diff[df_diff$Municipality==munic,"Municipality"],
+       barplot(height = as.matrix(df_diff[df_diff$Municipality==municip,c("BE","PCP", "PSD","PS", "Others")]),
+                      main = df_diff[df_diff$Municipality==municip,"Municipality"],
                       horiz = FALSE,
                       beside = TRUE,
                       ylab = "in Percentage Points",
-                      #                  legend.text = c("BE","PCP.PEV", "PPD","PS", "Others"),
-                      col = c("#ff000d", "#840000","#fdaa48","#cb416b","grey")
+                      col = colorPalette
         )
       })
       output$scatterSocioEco <- renderPlot({
-        plot(sociotable[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("green")) %>%
-          points(x=sociotable[sociotable$Municipality==munic,input$x_value],
-                 y=sociotable[sociotable$Municipality==munic,input$y_value], 
-                 pch = 10, cex = 4, lwd = 4, col=c("red"))
+        plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("dark grey"), ann=FALSE, par(mar=c(2,2,0,0))) %>%
+          points(x=df_2015[df_2015$Municipality==municip,input$x_value],
+                 y=df_2015[df_2015$Municipality==municip,input$y_value], 
+                 pch = 20, cex = 1, lwd = 4, col=c("red"))
       })
     })
   })
@@ -185,9 +174,9 @@ function(input, output, session) {
       filter(
         Population >= input$minScore,
         Population <= input$maxScore,
-        is.null(input$municipality) | Municipality %in% input$municipality,
+        is.null(input$municipality) | Municipality %in% input$municipality
       ) %>%
-      mutate(Action = paste('<a class="go-map" href="" data-lat="', Municipality ,'"><i class="fa fa-crosshairs"></i></a>', sep=""))
+      mutate( paste('<a class="go-map" href="" data-lat="', Municipality ,'"><i class="fa fa-2x fa-crosshairs"></i></a>', sep=""))
     action <- DT::dataTableAjax(session, df)
 
     DT::datatable(df, options = list(ajax = list(url = action)), escape = FALSE)
@@ -199,7 +188,7 @@ function(input, output, session) {
     pie(pieplot_values, 
         labels = parties, 
         main="Voting Percentages", 
-        col=c("blue", "#840000", "#fdaa48", "#cb416b", "grey"),
+        col=colorPalette,
         radius = 1)
     
   })
