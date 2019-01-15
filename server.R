@@ -176,6 +176,7 @@ function(input, output, session) {
         Turnout >= input$turnout[1], Turnout <= input$turnout[2],
         `Unemployment Rate` >= input$unemployment[1], `Unemployment Rate` <= input$unemployment[2],
         `Uneducated Population` >= input$education[1], `Uneducated Population` <= input$education[2],
+        `Young Population` >= input$age[1], `Young Population` <= input$age[2],
         is.null(input$municipality) | Municipality %in% input$municipality
       ) %>%
       mutate( Location = paste('<a class="go-map" href="" data-lat="', Municipality ,'"><i class="fa fa-2x fa-crosshairs"></i></a>', sep=""))
