@@ -87,16 +87,50 @@ results_table <- rbind(results_table, df_temp)
 results_table$`Municipalty Victories` <- sapply(results_table$`Municipalty Victories`, as.numeric)
 votes <- list(pieplot_values[[2]], pieplot_values[[3]], pieplot_values[[4]], pieplot_values[[1]], pieplot_values[[5]])
 
-results_table$`Total Votes` <- votes
-results_table$`Total Votes` <- sapply(results_table$`Total Votes`, as.numeric)
+results_table$`Votes` <- votes
+results_table$`Votes` <- sapply(results_table$`Votes`, as.numeric)
 
 
-total_values <- colSums(results_table[,c("Total Votes","Municipalty Victories")])
+total_values <- colSums(results_table[,c("Votes","Municipalty Victories")])
 
 results_table$Party <- sapply(results_table$Party, as.character)
 total_values_list <- list("Total", total_values[2], total_values[1])
 
 results_table[nrow(results_table) + 1,] = total_values_list
 
+results_table$`%Voting` <- results_table$`Votes` * 100 / results_table[6,3] 
+results_table$`%Voting` <- round(results_table$`%Voting`, digits = 1)
 
+###### Results table 2011 ######
 
+results_2011 <- copy(df_2011)
+
+results_2011$Others <- df_2011$Others + df_2011$PAN
+results_2011$`PPD/PSD.CDS.PP` <- df_2011$CDS.PP + df_2011$PPD.PSD
+results_2011$PS <- df_2011$PS 
+results_2011$PCP.PEV <- df_2011$PCP.PEV 
+results_2011$BE <- df_2011$BE
+
+columns_2011 <- c('Others', 'PPD/PSD.CDS.PP', 'PS', 'PCP.PEV', 'BE', 'Total')
+results_2011 <- results_2011[, columns_2011]
+results_2011 <- sapply(results_2011, as.numeric)
+
+column_sums_2011 <- colSums(results_2011)
+total_votes_2011 <- column_sums_2011[[6]]
+
+Others <- round(column_sums_2011[[1]] / total_votes_2011 * 100 , digits = 1)
+`PPD/PSD.CDS.PP` <- round(column_sums_2011[[2]] / total_votes_2011 * 100 , digits = 1)
+PS <- round(column_sums_2011[[3]] / total_votes_2011 * 100 , digits = 1)
+`PCP.PEV` <- round(column_sums_2011[[4]] / total_votes_2011 * 100 , digits = 1)
+BE <- round(column_sums_2011[[5]] / total_votes_2011 * 100 , digits = 1)
+total_votes_2011 <- round(total_votes_2011 , digits = 0)
+
+results_2011 <- data.frame(Party = c('PCP-PEV', 'PPD/PSD.CDS-PP', 'PS', 'BE', 'Others', 'Total'))
+results_2011$`Voting%` <- c(`PCP.PEV`, `PPD/PSD.CDS.PP`, PS, BE, Others, total_votes_2011)
+
+results_2011$diff2015 <- results_table$`%Voting` - results_2011$`Voting%` 
+results_2011[6,3] <- (results_table[6,3] - results_2011[6,3]) / results_table[6,3]
+results_2011$diff2015 <- round(results_2011$diff2015, digit=1)
+
+results_2011$Party <- sapply(results_2011$Party, as.character)
+results_2011[6,1] <- "Total Votes"

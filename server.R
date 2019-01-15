@@ -185,18 +185,37 @@ function(input, output, session) {
     DT::datatable(df, options = list(ajax = list(url = action)), escape = FALSE)
   })
 
-## Election Results ##########################################  
-    
+  # Election results ######################################
+  
   output$pieplot_results <- renderPlot({
+    
     pie(pieplot_values, 
         labels = parties, 
         main="Voting Percentages", 
         col=colorPalette,
         radius = 1)
     
+    
   })
   
   output$results_table <- DT::renderDataTable({
     DT::datatable(results_table, options = list(dom = 't'), rownames = FALSE)
   })
+  output$bar_Plot_diff <- renderPlot({
+    
+    colorPalette_02 <- c( "#840000","#fdaa48","#cb416b","#ff000d","grey", "black")
+    
+    p <- barplot(height = results_2011$diff2015,
+                 horiz = FALSE,
+                 beside = TRUE,
+                 ylab = "Increase/Decrease in %Votes",
+                 names.arg = results_2011$Party,
+                 col = colorPalette_02,
+                 space=1.4, 
+                 ylim=range(pretty(c(0, results_2011$diff2015)))
+    )
+    text(p, results_2011$diff2015 + 2*sign(results_2011$diff2015), labels=results_2011$diff2015, xpd=FALSE)
+  })
 }
+
+

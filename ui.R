@@ -91,13 +91,23 @@ fluidRow(
     DT::dataTableOutput("municipTable")
   ),
   
-  # Election results ######################################
-  
-  tabPanel("Election Results", 
-           fluidRow(
-             column(width = 6, plotOutput(outputId = "pieplot_results")),
-             column(width = 4, DT::dataTableOutput("results_table"))
-           )
-  ),
-  conditionalPanel("false", icon("crosshair"))
+# Election results ######################################
+
+tabPanel("Election Results", 
+         fluidRow(
+           column(12, 
+                  h5("2015 Parliament Election Result of Portugal"))), 
+         fluidRow(
+           column(width = 6, plotOutput(outputId = "pieplot_results")),
+           column(width = 4, DT::dataTableOutput("results_table"))
+         ),
+         fluidRow(
+           column(12, 
+                  h5("2015 Parliament Election in perspective to the 2011 Parlement Election"))), 
+         fluidRow(
+           column(width = 2),
+           column(width = 8, plotOutput(outputId = "bar_Plot_diff"))
+         )
+),
+conditionalPanel("false", icon("crosshair"))
 )
