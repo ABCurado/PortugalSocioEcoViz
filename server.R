@@ -88,7 +88,7 @@ function(input, output, session) {
   }
   
   output$scatterSocioEco <- renderPlot({
-    plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("black"), ann=FALSE, par(mar=c(0,0,0,0)))
+    plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("black"), ann=FALSE, par(mar=c(2,2,0,0)))
   })
 
 
@@ -120,7 +120,7 @@ function(input, output, session) {
                       col = colorPalette
         )
         output$scatterSocioEco <- renderPlot({
-          plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("dark grey"), ann=FALSE, par(mar=c(0,0,0,0))) %>%
+          plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("dark grey"), ann=FALSE, par(mar=c(2,2,0,0))) %>%
             points(x=df_2015[df_2015$Municipality==municip,input$x_value],
                    y=df_2015[df_2015$Municipality==municip,input$y_value], 
                    pch = 20, cex =  1, lwd = 4, col=c("red"))
@@ -158,7 +158,7 @@ function(input, output, session) {
         )
       })
       output$scatterSocioEco <- renderPlot({
-        plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("dark grey"), ann=FALSE, par(mar=c(0,0,0,0))) %>%
+        plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("dark grey"), ann=FALSE, par(mar=c(2,2,0,0))) %>%
           points(x=df_2015[df_2015$Municipality==municip,input$x_value],
                  y=df_2015[df_2015$Municipality==municip,input$y_value], 
                  pch = 20, cex = 1, lwd = 4, col=c("red"))
@@ -173,7 +173,7 @@ function(input, output, session) {
         Population <= input$maxScore,
         is.null(input$municipality) | Municipality %in% input$municipality
       ) %>%
-      mutate(Action = paste('<a class="go-map" href="" data-lat="', Municipality ,'"><i class="fa fa-crosshairs"></i></a>', sep=""))
+      mutate( paste('<a class="go-map" href="" data-lat="', Municipality ,'"><i class="fa fa-2x fa-crosshairs"></i></a>', sep=""))
     action <- DT::dataTableAjax(session, df)
 
     DT::datatable(df, options = list(ajax = list(url = action)), escape = FALSE)
