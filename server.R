@@ -115,7 +115,7 @@ function(input, output, session) {
       output$diffPlot <- renderPlot({
         
         barplot(height = as.matrix(df_diff[df_diff$Municipality==municip,c("BE","PCP", "PSD","PS", "Others")]),
-                      main = "Difference from 2011",
+                      main = "Swing 2011",
                       horiz = FALSE,
                       beside = TRUE,
                       ylab = "in Percentage Points",
