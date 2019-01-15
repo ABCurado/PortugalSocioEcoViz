@@ -37,7 +37,7 @@ function(input, output, session) {
   })
 
   output$scatterSocioEco <- renderPlot({
-    plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("green"))
+    plot(sociotable[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("green"))
   })
 
 
@@ -80,9 +80,12 @@ function(input, output, session) {
       tags$b(), 
       tags$br(),
       sprintf("Average Income: %s ", (selectedMunicipality$Total_Average_income)),
-      ("Euro"), tags$br(),
-      tags$b(),
+      ("Euro"), tags$b(),
+      tags$br(),
       sprintf("Uneducated Population: %s %s", round((selectedMunicipality$Fraction_Without_Education)*100, digits = 2), ("%")),
+      tags$b(),
+      tags$br(),
+      sprintf("Turnout: %s %s", round((selectedMunicipality$Total/selectedMunicipality$Total_Number_People_x)*100, digits = 2), ("%")),
       tags$b(),
       tags$h4("Election Result:"),
       tags$b(),
@@ -120,7 +123,7 @@ function(input, output, session) {
       output$diffPlot <- renderPlot({
         
         barplot(height = as.matrix(df_diff[df_diff$Municipality==event$properties$name_2,c("BE","PCP", "PSD","PS", "Others")]),
-                      main = "Change in % votes from 2011",
+                      main = "Difference from 2011",
                       horiz = FALSE,
                       beside = TRUE,
                       ylab = "in Percentage Points",
@@ -128,16 +131,16 @@ function(input, output, session) {
                       col = c("#ff000d", "#840000","#fdaa48","#cb416b","grey")
         )
         output$scatterSocioEco <- renderPlot({
-          plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("green")) %>%
-            points(x=df_2015[df_2015$Municipality==event$properties$name_2,input$x_value],
-                   y=df_2015[df_2015$Municipality==event$properties$name_2,input$y_value], 
+          plot(sociotable[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("green")) %>%
+            points(x=sociotable[sociotable$Municipality==event$properties$name_2,input$x_value],
+                   y=sociotable[sociotable$Municipality==event$properties$name_2,input$y_value], 
                    pch = 10, cex = 4, lwd = 4, col=c("red"))
         })
       })
       })
   })
   
-  ## Data Explorer ###########################################
+  ## Socio-Economic Data ###########################################
 
   observe({
     Municipality <- if (is.null(input$Municipality)) character(0) else {
@@ -169,9 +172,9 @@ function(input, output, session) {
         )
       })
       output$scatterSocioEco <- renderPlot({
-        plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("green")) %>%
-          points(x=df_2015[df_2015$Municipality==munic,input$x_value],
-                 y=df_2015[df_2015$Municipality==munic,input$y_value], 
+        plot(sociotable[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("green")) %>%
+          points(x=sociotable[sociotable$Municipality==munic,input$x_value],
+                 y=sociotable[sociotable$Municipality==munic,input$y_value], 
                  pch = 10, cex = 4, lwd = 4, col=c("red"))
       })
     })
@@ -189,7 +192,9 @@ function(input, output, session) {
 
     DT::datatable(df, options = list(ajax = list(url = action)), escape = FALSE)
   })
-  
+
+## Election Results ##########################################  
+    
   output$pieplot_results <- renderPlot({
     pie(pieplot_values, 
         labels = parties, 

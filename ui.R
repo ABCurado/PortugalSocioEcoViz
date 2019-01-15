@@ -2,17 +2,18 @@ library(leaflet)
 
 # Choices for drop-downs
 vars <- c(
-  "Young people%" = "Fraction_0.14",
-  "Population Size" = "Total",
-  "Total Average Income" = "Total_Average_income",
-  "Unemployment Rate" = "Unemployment_.Rate",
-  "Uneducated Percentage" = "Fraction_Without_Education"
+  "Young People in %" = "Young Population",
+  "Population Size" = "Population",
+  "Total Average Income" = "Average Income",
+  "Unemployment Rate" = "Unemployment Rate",
+  "Uneducated Population in %" = "Uneducated Population",
+  "Turnout" = "Turnout"
 )
 
 
 navbarPage("Portugal SocioEco", id="nav",
 
-  tabPanel("Interactive map",
+  tabPanel("Interactive Map",
     div(class="outer",
 
       tags$head(
