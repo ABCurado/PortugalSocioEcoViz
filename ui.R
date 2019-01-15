@@ -34,7 +34,7 @@ navbarPage("Portugal SocioEco", id="nav",
         h2("Parliament Election 2015"),
 
         selectInput("x_value", "X-axis", vars),
-        selectInput("y_value", "Y-axis", vars, selected = "Total_Average_income"),
+        selectInput("y_value", "Y-axis", vars, selected = "Turnout"),
 
         plotOutput("scatterSocioEco", height = 200),
         plotOutput("diffPlot", height = 250)

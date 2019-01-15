@@ -2,3 +2,5 @@ Title: Parliament Election 2015 Portugal
 Authors: A. B. Curado et al.
 Type: Shiny
 Tags: leaflet election data Portugal
+Comments: This work is based on the Zip Explorer Example from the Shiny Gallery (https://shiny.rstudio.com/gallery/superzip-example.html).
+          It was used as a baseline and adjusted to the projects needs.

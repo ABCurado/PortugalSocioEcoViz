@@ -59,7 +59,6 @@ function(input, output, session) {
   # Show a popup at the given location
   showPopup <- function(municipality) {
     selectedMunicipality <- df_2015[df_2015$Municipality == municipality,]
-    print(municipality)
     content <- as.character(tagList(
       tags$h3((selectedMunicipality$Municipality)),
       tags$b(),
@@ -91,7 +90,7 @@ function(input, output, session) {
   }
   
   output$scatterSocioEco <- renderPlot({
-    plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("black"), ann=FALSE, par(mar=c(2,2,0,0)))
+    plot(sociotable[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("black"), ann=FALSE, par(mar=c(2,2,0,0)))
   })
 
 
@@ -123,9 +122,9 @@ function(input, output, session) {
                       col = colorPalette
         )
         output$scatterSocioEco <- renderPlot({
-          plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("dark grey"), ann=FALSE, par(mar=c(2,2,0,0))) %>%
-            points(x=df_2015[df_2015$Municipality==municip,input$x_value],
-                   y=df_2015[df_2015$Municipality==municip,input$y_value], 
+          plot(sociotable[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("dark grey"), ann=FALSE, par(mar=c(2,2,0,0))) %>%
+            points(x=sociotable[sociotable$Municipality==municip,input$x_value],
+                   y=sociotable[sociotable$Municipality==municip,input$y_value], 
                    pch = 20, cex =  1, lwd = 4, col=c("red"))
         })
       })
@@ -161,9 +160,9 @@ function(input, output, session) {
         )
       })
       output$scatterSocioEco <- renderPlot({
-        plot(df_2015[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("dark grey"), ann=FALSE, par(mar=c(2,2,0,0))) %>%
-          points(x=df_2015[df_2015$Municipality==municip,input$x_value],
-                 y=df_2015[df_2015$Municipality==municip,input$y_value], 
+        plot(sociotable[ , c(input$x_value,input$y_value)], pch = 20, cex = 1, col=c("dark grey"), ann=FALSE, par(mar=c(2,2,0,0))) %>%
+          points(x=sociotable[sociotable$Municipality==municip,input$x_value],
+                 y=sociotable[sociotable$Municipality==municip,input$y_value], 
                  pch = 20, cex = 1, lwd = 4, col=c("red"))
       })
     })
