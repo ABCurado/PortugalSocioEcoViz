@@ -4,11 +4,11 @@ Visualization created in R using the shiny framework to better understand Portug
 
 ### Build docker image 
 
-docker build -t municipalitiesShinyApp .
+docker build -t municipalities_shiny_app .
 
 ### Run image
 
-docker run -d -p 8080:80 --name shinyApp municipalitiesShinyApp
+docker run -d -p 8080:80 --name shinyApp municipalities_shiny_app
 
 ### Access visualization
 
